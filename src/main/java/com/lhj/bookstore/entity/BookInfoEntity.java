@@ -1,5 +1,6 @@
 package com.lhj.bookstore.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -8,8 +9,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.CreatedDate;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "book_info")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookInfoEntity {
 
 	@Id // pk
@@ -26,84 +37,44 @@ public class BookInfoEntity {
 	
 	private String writer; // 저자
 	
-	private Date createdAt; // 발행일자
+	private LocalDateTime createdAt; // 발행일자
 	
 	private Integer fixPrice; // 정가
 	
 	private Integer discount; // 적용할인율
-
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
+	public void changeTitle(String title) {
 		this.title = title;
 	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	public Integer getSupPrice() {
-		return supPrice;
-	}
-
-	public void setSupPrice(Integer supPrice) {
+	
+	public void changeSupPrice(Integer supPrice) {
 		this.supPrice = supPrice;
 	}
-
-	public String getWriter() {
-		return writer;
-	}
-
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Integer getFixPrice() {
-		return fixPrice;
-	}
-
-	public void setFixPrice(Integer fixPrice) {
+	
+	public void changeFixPrice(Integer fixPrice) {
 		this.fixPrice = fixPrice;
 	}
-
-	public Integer getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Integer discount) {
+	
+	public void changeDiscount(Integer discount) {
 		this.discount = discount;
 	}
-
 	
+	@Builder
+	public BookInfoEntity(String title
+						, String type 
+						, Integer quantity
+						, Integer supPrice 
+						, String writer
+						, Integer fixPrice
+						, Integer discount
+						, LocalDateTime createdAt) {
+		this.title = title;
+		this.type = type;
+		this.quantity = quantity;
+		this.supPrice = supPrice;
+		this.writer = writer;
+		this.fixPrice = fixPrice;
+		this.discount = discount;
+		this.createdAt = createdAt;
+	}
 }
