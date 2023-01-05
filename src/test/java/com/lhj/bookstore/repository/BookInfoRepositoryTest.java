@@ -19,12 +19,13 @@ import org.springframework.context.annotation.Import;
 
 import com.github.gavlyukovskiy.boot.jdbc.decorator.DataSourceDecoratorAutoConfiguration;
 import com.lhj.bookstore.config.P6spyLogMessageFormatConfig;
+import com.lhj.bookstore.config.QuerydslConfig;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 @DisplayName("jpa 단위 테스트")
 @DataJpaTest(showSql = false)
 @ImportAutoConfiguration(DataSourceDecoratorAutoConfiguration.class)
-@Import(P6spyLogMessageFormatConfig.class)
+@Import({P6spyLogMessageFormatConfig.class, QuerydslConfig.class})
 public class BookInfoRepositoryTest {
 	
 	@Autowired
@@ -78,7 +79,8 @@ public class BookInfoRepositoryTest {
 		String title = "Java";
 		
 		// when
-		List<BookInfoEntity> reuslt = bookInfoRepository.findByTitleContaining(title);
+//		List<BookInfoEntity> reuslt = bookInfoRepository.findByTitleContaining(title);
+		List<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo();
 		
 		// then
 		assertThat(reuslt).isNotEmpty();
