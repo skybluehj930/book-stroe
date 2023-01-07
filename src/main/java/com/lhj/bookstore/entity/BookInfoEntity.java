@@ -43,16 +43,13 @@ public class BookInfoEntity {
 	
 	private Integer discount; // 적용할인율
 	
-	public void changeTitle(String title) {
-		this.title = title;
-	}
 	
 	public void changeSupPrice(Integer supPrice) {
 		this.supPrice = supPrice;
 	}
 	
-	public void changeFixPrice(Integer fixPrice) {
-		this.fixPrice = fixPrice;
+	public void changeQuantitye(Integer quantity) {
+		this.quantity = quantity;
 	}
 	
 	public void changeDiscount(Integer discount) {

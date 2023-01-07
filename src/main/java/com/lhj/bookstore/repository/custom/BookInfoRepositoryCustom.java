@@ -1,9 +1,11 @@
 package com.lhj.bookstore.repository.custom;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 public interface BookInfoRepositoryCustom {
-	List<BookInfoEntity> searchBookInfo();
+	Page<BookInfoEntity> searchBookInfo(SearchBookInfoDto booInfoDto, Pageable pageable);
 }
