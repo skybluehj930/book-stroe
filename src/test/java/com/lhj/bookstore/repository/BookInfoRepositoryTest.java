@@ -63,15 +63,15 @@ class BookInfoRepositoryTest {
 		
 		// given
 		BookInfoEntity bookInfoEntity = BookInfoEntity.builder()
-											.title("Node.js")
-											.type("T002")
-											.supPrice(1000)
-											.fixPrice(2000)
-											.quantity(100)
-											.writer("이목룡")
-											.discount(5)
-											.createdAt(LocalDateTime.now())
-											.build();
+				.title("Node.js")
+				.type("T002")
+				.supPrice(1000)
+				.fixPrice(2000)
+				.quantity(100)
+				.writer("이목룡")
+				.discount(5)
+				.createdAt(LocalDateTime.now())
+				.build();
 		
 		// when
 		BookInfoEntity reuslt = bookInfoRepository.save(bookInfoEntity);
