@@ -3,8 +3,9 @@ package com.lhj.bookstore.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,14 +17,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StopWatch;
 
 import com.github.gavlyukovskiy.boot.jdbc.decorator.DataSourceDecoratorAutoConfiguration;
 import com.lhj.bookstore.config.P6spyLogMessageFormatConfig;
 import com.lhj.bookstore.config.QuerydslConfig;
 import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
-
-import lombok.extern.slf4j.Slf4j;
 
 @DisplayName("도서  Jpa 단위 테스트")
 @DataJpaTest(showSql = false)
@@ -33,6 +33,19 @@ class BookInfoRepositoryTest {
 	
 	@Autowired
 	private BookInfoRepository bookInfoRepository;
+	
+	private static StopWatch stopWatch = new StopWatch();
+	
+	@BeforeAll
+	static void testStart() {
+		stopWatch.start();
+	}
+	
+	@AfterAll
+	static void testEnd() {
+		stopWatch.stop();
+		System.out.println("TotalTimeMillis - " + stopWatch.getTotalTimeMillis());
+	}
 	
 	@BeforeEach
 	void init() {
@@ -100,7 +113,7 @@ class BookInfoRepositoryTest {
 			pagingLog(reuslt);
 			
 			// then
-			assertThat(reuslt.getContent()).isNotNull();
+			assertThat(reuslt.getContent()).isNotEmpty();
 			assertThat(reuslt.getContent().get(0).getTitle()).containsIgnoringCase(keyword);
 			assertThat(reuslt.getContent().get(0).getType()).isEqualTo(type);
 		}
@@ -120,7 +133,7 @@ class BookInfoRepositoryTest {
 			pagingLog(reuslt);
 			
 			// then
-			assertThat(reuslt.getContent()).isNotNull();
+			assertThat(reuslt.getContent()).isNotEmpty();
 			assertThat(reuslt.getContent().get(0).getWriter()).contains(keyword);
 			assertThat(reuslt.getContent().get(0).getType()).isEqualTo(type);
 		}
@@ -138,10 +151,45 @@ class BookInfoRepositoryTest {
 			pagingLog(reuslt);
 			
 			// then
-			assertThat(reuslt.getContent()).isNotNull();
+			assertThat(reuslt.getContent()).isNotEmpty();
 			assertThat(reuslt.getSize() > 1);
 		}
+		
+		@Test
+		@DisplayName("페이징 최적화 테스트(log확인) - 조회되는 데이터가 limit보다 작으면 count쿼리를 안한다.")
+		void searchBookInfo4() {
+			
+			// given
+			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(null, null, 1, 4);
+			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			
+			// when
+			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			pagingLog(reuslt);
+			
+			// then
+			assertThat(reuslt.getContent()).isNotEmpty();
+			assertThat(reuslt.getTotalPages()).isEqualTo(1);
+		}
+		
+		@Test
+		@DisplayName("페이징 최적화 테스트(log확인) - 조회되는 데이터가 limit보다 크거나 같으면 count쿼리를 실행한다.")
+		void searchBookInfo5() {
+			
+			// given
+			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(null, null, 1, 2);
+			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			
+			// when
+			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			pagingLog(reuslt);
+			
+			// then
+			assertThat(reuslt.getContent()).isNotEmpty();
+			assertThat(reuslt.getTotalPages()).isEqualTo(2);
+		}
 	}
+	
 	
 	@Test
 	@DisplayName("3. 도서 수정")

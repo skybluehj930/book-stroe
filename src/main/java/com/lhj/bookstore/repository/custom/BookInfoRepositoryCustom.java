@@ -7,5 +7,5 @@ import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 public interface BookInfoRepositoryCustom {
-	Page<BookInfoEntity> searchBookInfo(SearchBookInfoDto booInfoDto, Pageable pageable);
+	Page<BookInfoEntity> searchBookInfo(SearchBookInfoDto searchBookInfoDto, Pageable pageable);
 }

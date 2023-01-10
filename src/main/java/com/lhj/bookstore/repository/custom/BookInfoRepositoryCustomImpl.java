@@ -1,18 +1,18 @@
 package com.lhj.bookstore.repository.custom;
 
+import static com.lhj.bookstore.entity.QBookInfoEntity.bookInfoEntity;
+
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
-import static com.lhj.bookstore.entity.QBookInfoEntity.bookInfoEntity;
-
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -24,16 +24,7 @@ public class BookInfoRepositoryCustomImpl implements BookInfoRepositoryCustom {
 
 	@Override
 	public Page<BookInfoEntity> searchBookInfo(SearchBookInfoDto SearchBookInfoDto, Pageable pageable) {
-		long total = queryFactory
-				.select(bookInfoEntity.count())
-				.from(bookInfoEntity)
-				.where(
-						eqType(SearchBookInfoDto.getType())
-						, containsKeyword(SearchBookInfoDto.getKeyword())
-				)
-				.fetchFirst();
-		
-		List<BookInfoEntity> content = total > 0 ? queryFactory
+		List<BookInfoEntity> content = queryFactory
 				.selectFrom(bookInfoEntity)
 				.where(
 						eqType(SearchBookInfoDto.getType())
@@ -41,9 +32,17 @@ public class BookInfoRepositoryCustomImpl implements BookInfoRepositoryCustom {
 						)
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
-				.fetch() : null;
+				.fetch();
+				
+		JPAQuery<Long> countQuery = queryFactory
+				.select(bookInfoEntity.count())
+				.from(bookInfoEntity)
+				.where(
+						eqType(SearchBookInfoDto.getType())
+						, containsKeyword(SearchBookInfoDto.getKeyword())
+				);
 		
-	    return new PageImpl<>(content, pageable, total);
+	    return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchFirst);
 	}
 
 	private BooleanExpression containsKeyword(String keyword) {
