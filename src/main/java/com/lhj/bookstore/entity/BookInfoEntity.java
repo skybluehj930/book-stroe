@@ -1,7 +1,6 @@
 package com.lhj.bookstore.entity;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,13 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "book_info")
@@ -37,7 +33,7 @@ public class BookInfoEntity {
 	
 	private String writer; // 저자
 	
-	private LocalDateTime createdAt; // 발행일자
+	private LocalDate createdAt; // 발행일자
 	
 	private Integer fixPrice; // 정가
 	
@@ -64,7 +60,7 @@ public class BookInfoEntity {
 						, String writer
 						, Integer fixPrice
 						, Integer discount
-						, LocalDateTime createdAt) {
+						, LocalDate createdAt) {
 		this.title = title;
 		this.type = type;
 		this.quantity = quantity;

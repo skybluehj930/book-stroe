@@ -2,6 +2,7 @@ package com.lhj.bookstore.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.AfterAll;
@@ -62,7 +63,7 @@ class BookInfoRepositoryTest {
 					.quantity(100)
 					.writer(writerArr[i])
 					.discount(5)
-					.createdAt(LocalDateTime.now())
+					.createdAt(LocalDate.now())
 					.build();
 			
 			bookInfoRepository.save(bookInfoEntity);
@@ -71,8 +72,8 @@ class BookInfoRepositoryTest {
 	
 	
 	@Test
-	@DisplayName("1. 도서 등록")
-	void bookRegister() {
+	@DisplayName("도서 등록")
+	void registBookInfo() {
 		
 		// given
 		BookInfoEntity bookInfoEntity = BookInfoEntity.builder()
@@ -83,7 +84,7 @@ class BookInfoRepositoryTest {
 				.quantity(100)
 				.writer("이목룡")
 				.discount(5)
-				.createdAt(LocalDateTime.now())
+				.createdAt(LocalDate.now())
 				.build();
 		
 		// when
@@ -94,7 +95,7 @@ class BookInfoRepositoryTest {
 	}
 	
 	@Nested
-	@DisplayName("2. 도서 조회")
+	@DisplayName("도서 검색")
 	class SearchBookInfo {
 		
 		@Test
@@ -192,19 +193,33 @@ class BookInfoRepositoryTest {
 	
 	
 	@Test
-	@DisplayName("3. 도서 수정")
-	void bookModify() {
-		int discount = 10;
+	@DisplayName("도서 수정")
+	void modifyBookInfo() {
 		
 		// given
+		int discount = 10;
 		BookInfoEntity bookInfoEntity = bookInfoRepository.findById(1L).orElse(null);
-		bookInfoEntity.changeDiscount(10);
+		bookInfoEntity.changeDiscount(discount);
 		
 		// when
 		BookInfoEntity reuslt = bookInfoRepository.findById(1L).orElse(null);
 		
 		// then
 		assertThat(reuslt.getDiscount()).isEqualTo(discount);
+	}
+	
+	@Test
+	@DisplayName("도서 단건 조회")
+	void getBookInfo() {
+		
+		// given
+		long id = 1L;
+		
+		// when
+		BookInfoEntity reuslt = bookInfoRepository.findById(1L).orElse(null);
+		
+		// then
+		assertThat(reuslt).isNotNull();
 	}
 	
 	/**
