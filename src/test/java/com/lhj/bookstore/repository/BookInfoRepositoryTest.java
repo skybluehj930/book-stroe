@@ -3,7 +3,6 @@ package com.lhj.bookstore.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,25 +11,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StopWatch;
 
-import com.github.gavlyukovskiy.boot.jdbc.decorator.DataSourceDecoratorAutoConfiguration;
-import com.lhj.bookstore.config.P6spyLogMessageFormatConfig;
-import com.lhj.bookstore.config.QuerydslConfig;
 import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 @DisplayName("도서  Jpa 단위 테스트")
-@DataJpaTest(showSql = false)
-@ImportAutoConfiguration(DataSourceDecoratorAutoConfiguration.class)
-@Import({P6spyLogMessageFormatConfig.class, QuerydslConfig.class})
-class BookInfoRepositoryTest {
+class BookInfoRepositoryTest extends RepositoryTestCommon {
 	
 	@Autowired
 	private BookInfoRepository bookInfoRepository;
