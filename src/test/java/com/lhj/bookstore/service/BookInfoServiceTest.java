@@ -107,6 +107,7 @@ class BookInfoServiceTest {
 			
 			// then
 			assertThat(reuslt.getContent()).isNotNull();
+			assertThat(reuslt.getTotalElements()).isEqualTo(1);
 			assertThat(reuslt.getContent().get(0).getTitle()).containsIgnoringCase(keyword);
 			assertThat(reuslt.getContent().get(0).getType()).isEqualTo(type);
 		}
@@ -150,23 +151,24 @@ class BookInfoServiceTest {
 	void modifyBookInfo() {
 		
 		// given
+		long bookId = 1L;
 		BookInfoDto bookInfoDto = BookInfoDto.builder()
-				.id(1L)
 				.quantity(1)
 				.discount(10)
 				.supPrice(3000)
 				.build();
 		
-		bookInfoService.modifyBookInfo(bookInfoDto);
+		bookInfoService.modifyBookInfo(bookId, bookInfoDto);
 		
 		// when
-		BookInfoEntity reuslt = bookInfoService.getBookInfo(1L);
+		BookInfoEntity reuslt = bookInfoService.getBookInfo(bookId);
 		
 		// then
 		assertThat(reuslt).isNotNull();
-		assertThat(reuslt.getQuantity()).isEqualTo(1);
-		assertThat(reuslt.getDiscount()).isEqualTo(10);
-		assertThat(reuslt.getSupPrice()).isEqualTo(3000);
+		assertThat(reuslt.getId()).isEqualTo(bookId);
+		assertThat(reuslt.getQuantity()).isEqualTo(bookInfoDto.getQuantity());
+		assertThat(reuslt.getDiscount()).isEqualTo(bookInfoDto.getDiscount());
+		assertThat(reuslt.getSupPrice()).isEqualTo(bookInfoDto.getSupPrice());
 	}
 	
 	@Test

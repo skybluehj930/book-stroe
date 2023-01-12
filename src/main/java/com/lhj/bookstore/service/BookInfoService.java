@@ -51,8 +51,8 @@ public class BookInfoService {
 	}
 
 	@Transactional
-	public BookInfoEntity modifyBookInfo(BookInfoDto bookInfoDto) {
-		Optional<BookInfoEntity> bookInfoEntity = bookInfoRepository.findById(bookInfoDto.getId());
+	public BookInfoEntity modifyBookInfo(long bookId, BookInfoDto bookInfoDto) {
+		Optional<BookInfoEntity> bookInfoEntity = bookInfoRepository.findById(bookId);
 		if(bookInfoEntity.isPresent()) {
 			bookInfoEntity.get().changeDiscount(bookInfoDto.getDiscount());
 			bookInfoEntity.get().changeQuantitye(bookInfoDto.getQuantity());
