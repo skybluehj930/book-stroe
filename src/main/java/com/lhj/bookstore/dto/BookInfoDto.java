@@ -27,8 +27,7 @@ public class BookInfoDto {
 	private Integer discount; // 적용할인율
 	
 	@Builder
-	public BookInfoDto(Long id
-						, String title
+	public BookInfoDto(String title
 						, String type 
 						, Integer quantity
 						, Integer supPrice 
@@ -37,7 +36,6 @@ public class BookInfoDto {
 						, Integer discount
 						, String createdAt) {
 		
-		this.id = id;
 		this.title = title;
 		this.type = type;
 		this.quantity = quantity;
