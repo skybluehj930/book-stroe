@@ -100,7 +100,12 @@ class BookInfoServiceTest {
 			// given
 			String keyword = "java"; 
 			String type = "T001"; 
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(keyword, type, 1, 10);
+			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+					.keyword(keyword)
+					.type(type)
+					.offset(1)
+					.limit(10)
+					.build();
 			
 			// when
 			Page<BookInfoEntity> reuslt = bookInfoService.searchBookInfo(searchBookInfoDto);
@@ -119,7 +124,12 @@ class BookInfoServiceTest {
 			// given
 			String keyword = "길동"; 
 			String type = "T001"; 
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(keyword, type, 1, 10);
+			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+					.keyword(keyword)
+					.type(type)
+					.offset(1)
+					.limit(10)
+					.build();
 			
 			// when
 			Page<BookInfoEntity> reuslt = bookInfoService.searchBookInfo(searchBookInfoDto);

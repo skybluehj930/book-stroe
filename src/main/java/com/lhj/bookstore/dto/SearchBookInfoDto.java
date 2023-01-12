@@ -1,6 +1,6 @@
 package com.lhj.bookstore.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter // @ModelAttribute로 값을 받기 위해 setter 적용
 @NoArgsConstructor
-@AllArgsConstructor
 public class SearchBookInfoDto {
 	
 	private String keyword; // 검색 키워드
@@ -18,4 +17,12 @@ public class SearchBookInfoDto {
 	private Integer offset = 1;
 	
 	private Integer limit = 10;
+	
+	@Builder
+	public SearchBookInfoDto(String keyword, String type, Integer offset, Integer limit) {
+		this.keyword = keyword;
+		this.type = type;
+		this.offset = offset;
+		this.limit = limit;
+	}
 }

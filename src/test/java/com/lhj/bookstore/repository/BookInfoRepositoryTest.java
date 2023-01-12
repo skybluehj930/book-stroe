@@ -95,7 +95,12 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 			// given
 			String keyword = "Mysql"; 
 			String type = "T003"; 
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(keyword, type, 1, 10);
+			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+					.keyword(keyword)
+					.type(type)
+					.offset(1)
+					.limit(10)
+					.build();
 			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
 			
 			// when
@@ -116,7 +121,12 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 			// given
 			String keyword = "길동"; 
 			String type = "T001"; 
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(keyword, type, 1, 10);
+			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+					.keyword(keyword)
+					.type(type)
+					.offset(1)
+					.limit(10)
+					.build();
 			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
 			
 			// when
@@ -151,7 +161,10 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		void searchBookInfo4() {
 			
 			// given
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(null, null, 1, 4);
+			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+					.offset(1)
+					.limit(4)
+					.build();
 			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
 			
 			// when
@@ -168,7 +181,10 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		void searchBookInfo5() {
 			
 			// given
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto(null, null, 1, 2);
+			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+					.offset(1)
+					.limit(2)
+					.build();
 			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
 			
 			// when
