@@ -38,6 +38,7 @@ public class ContractorService {
 		return contractorRepository.findAll(pageable);
 	}
 
+	@Transactional
 	public ContractorEntity modifyContractor(long conId, ContractorDto contractorDto) {
 		Optional<ContractorEntity> contractorEntity = contractorRepository.findById(conId);
 		if(contractorEntity.isPresent()) {
