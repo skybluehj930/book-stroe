@@ -35,21 +35,16 @@ import com.lhj.bookstore.entity.BookInfoEntity;
 import com.lhj.bookstore.repository.BookInfoRepository;
 
 @DisplayName("도서 통합 테스트")
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
-class BookInfoControllerTest {
+class BookInfoControllerTest extends ControllerTestCommon {
 	
 	@Autowired
-    protected MockMvc mvc;
+	private MockMvc mvc;
 	
     @Autowired
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
     
     @Autowired
 	private BookInfoRepository bookInfoRepository;
-	
-	private static StopWatch stopWatch = new StopWatch();
 	
 	@BeforeAll
 	static void testStart() {
