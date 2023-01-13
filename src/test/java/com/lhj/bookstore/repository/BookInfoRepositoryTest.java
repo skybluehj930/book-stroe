@@ -25,8 +25,6 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 	@Autowired
 	private BookInfoRepository bookInfoRepository;
 	
-	private static StopWatch stopWatch = new StopWatch();
-	
 	@BeforeAll
 	static void testStart() {
 		stopWatch.start();
