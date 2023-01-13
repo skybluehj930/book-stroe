@@ -23,15 +23,11 @@ import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 @DisplayName("도서 Service to Jpa 테스트")
-@DataJpaTest(showSql = false)
-@ImportAutoConfiguration(DataSourceDecoratorAutoConfiguration.class)
-@Import({P6spyLogMessageFormatConfig.class, QuerydslConfig.class, BookInfoService.class})
-class BookInfoServiceTest {
+@Import(BookInfoService.class)
+class BookInfoServiceTest extends ServiceTestCommon {
 	
 	@Autowired
 	private BookInfoService bookInfoService;
-	
-	private static StopWatch stopWatch = new StopWatch();
 	
 	@BeforeAll
 	static void testStart() {
