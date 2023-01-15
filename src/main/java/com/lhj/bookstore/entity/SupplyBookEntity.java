@@ -8,44 +8,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "supply_book")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SupplyBookEntity {
-
+	
 	@Id // pk
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
+    private Long id; // 공급도서번호
+
 	@ManyToOne
-	@JoinColumn(name = "supply_id")
+	@JoinColumn(name = "sup_id")
 	private SupplyEntity supply; // 공급번호
 	
 	@ManyToOne
-	@JoinColumn(name = "book_info_id")
+	@JoinColumn(name = "book_id")
 	private BookInfoEntity bookInfo; // 도서번호
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public SupplyEntity getSupply() {
-		return supply;
-	}
-
-	public void setSupply(SupplyEntity supply) {
+	
+	@Builder
+	public SupplyBookEntity(SupplyEntity supply, BookInfoEntity bookInfo) {
 		this.supply = supply;
-	}
-
-	public BookInfoEntity getBookInfo() {
-		return bookInfo;
-	}
-
-	public void setBookInfo(BookInfoEntity bookInfo) {
 		this.bookInfo = bookInfo;
 	}
-	
+
 }
