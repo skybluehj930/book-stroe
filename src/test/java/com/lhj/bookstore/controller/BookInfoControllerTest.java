@@ -92,7 +92,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
 				.quantity(100)
 				.writer("이목룡")
 				.discount(5)
-				.createdAt("2023-01-10")
+				.createdAt(LocalDate.now())
 				.build();
 		
 		// when

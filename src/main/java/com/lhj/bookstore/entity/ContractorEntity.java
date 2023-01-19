@@ -26,7 +26,6 @@ public class ContractorEntity {
 
 	@Id // pk
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "con_id")
     private Long id; // 계약번호
 	
 	private LocalDate contractAt; // 계약일자

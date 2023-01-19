@@ -1,5 +1,9 @@
 package com.lhj.bookstore.dto;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +24,8 @@ public class BookInfoDto {
 	
 	private String writer; // 저자
 	
-	private String createdAt; // 발행일자
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate createdAt; // 발행일자
 	
 	private Integer fixPrice; // 정가
 	
@@ -34,7 +39,7 @@ public class BookInfoDto {
 						, String writer
 						, Integer fixPrice
 						, Integer discount
-						, String createdAt) {
+						, LocalDate createdAt) {
 		
 		this.title = title;
 		this.type = type;

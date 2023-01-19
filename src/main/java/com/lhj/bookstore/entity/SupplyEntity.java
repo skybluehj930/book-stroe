@@ -33,7 +33,7 @@ public class SupplyEntity {
     private Long id; // 공급번호
 	
 	@ManyToOne
-	@JoinColumn(name = "con_id")
+	@JoinColumn(name = "cont_id")
 	private ContractorEntity contractor; // 계약번호
 	
 	@OneToMany(mappedBy = "supply")
@@ -42,9 +42,13 @@ public class SupplyEntity {
 	private LocalDate supplyAt; // 공급일자
 	
 	@Builder
-	public SupplyEntity(ContractorEntity contractor, List<SupplyBookEntity> supplyBookList, LocalDate supplyAt) {
-		this.contractor =  contractor;
-		this.supplyBookList = supplyBookList;
+	public SupplyEntity(ContractorEntity contractor, LocalDate supplyAt) {
+		if (this.contractor != null) {
+			this.contractor.getSupplyList().remove(this);
+		}
+		this.contractor = contractor;
+		contractor.getSupplyList().add(this);
+		
 		this.supplyAt =  supplyAt;
 	}
 }

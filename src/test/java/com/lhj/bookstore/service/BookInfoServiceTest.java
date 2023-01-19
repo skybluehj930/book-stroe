@@ -2,6 +2,8 @@ package com.lhj.bookstore.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,15 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
-import org.springframework.util.StopWatch;
 
-import com.github.gavlyukovskiy.boot.jdbc.decorator.DataSourceDecoratorAutoConfiguration;
-import com.lhj.bookstore.config.P6spyLogMessageFormatConfig;
-import com.lhj.bookstore.config.QuerydslConfig;
 import com.lhj.bookstore.dto.BookInfoDto;
 import com.lhj.bookstore.dto.SearchBookInfoDto;
 import com.lhj.bookstore.entity.BookInfoEntity;
@@ -55,7 +51,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 					.quantity(100)
 					.writer(writerArr[i])
 					.discount(5)
-					.createdAt("2023-01-10")
+					.createdAt(LocalDate.parse("2023-01-10"))
 					.build();
 			
 			bookInfoService.registBookInfo(bookInfoDto);
@@ -75,7 +71,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 				.quantity(100)
 				.writer("이목룡")
 				.discount(5)
-				.createdAt("2023-01-10")
+				.createdAt(LocalDate.parse("2023-01-10"))
 				.build();
 		
 		// when

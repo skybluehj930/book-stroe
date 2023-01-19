@@ -33,7 +33,12 @@ public class SupplyBookEntity {
 	
 	@Builder
 	public SupplyBookEntity(SupplyEntity supply, BookInfoEntity bookInfo) {
+		if (this.supply != null) {
+			this.supply.getSupplyBookList().remove(this);
+		}
 		this.supply = supply;
+		supply.getSupplyBookList().add(this);
+		
 		this.bookInfo = bookInfo;
 	}
 

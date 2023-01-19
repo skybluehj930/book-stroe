@@ -35,7 +35,7 @@ public class BookInfoService {
 				.quantity(bookInfoDto.getQuantity())
 				.writer(bookInfoDto.getWriter())
 				.discount(bookInfoDto.getDiscount())
-				.createdAt(LocalDate.parse(bookInfoDto.getCreatedAt(), DateTimeFormatter.ISO_DATE))
+				.createdAt(bookInfoDto.getCreatedAt())
 				.build();
 		
 		return bookInfoRepository.save(bookInfoEntity);
