@@ -11,8 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,17 +18,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StopWatch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lhj.bookstore.dto.BookInfoDto;
+import com.lhj.bookstore.dto.req.BookInfoReq;
 import com.lhj.bookstore.entity.BookInfoEntity;
 import com.lhj.bookstore.repository.BookInfoRepository;
 
@@ -84,7 +79,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
 	void registBookInfo() throws Exception {
 		
 		// given
-		BookInfoDto bookInfoDto = BookInfoDto.builder()
+		BookInfoReq bookInfoReq = BookInfoReq.builder()
 				.title("Node.js")
 				.type("T002")
 				.supPrice(1000)
@@ -98,7 +93,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
 		// when
 		ResultActions resultActions = mvc.perform(post("/book")
 				.contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(bookInfoDto))
+                .content(objectMapper.writeValueAsString(bookInfoReq))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 		
@@ -106,7 +101,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.title").value(bookInfoDto.getTitle()));
+                .andExpect(jsonPath("$.title").value(bookInfoReq.getTitle()));
 	}
 	
 	
@@ -168,7 +163,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
 			resultActions
 	            .andExpect(status().isOk())
 	            .andExpect(jsonPath("$.content.length()", equalTo(1)))
-				.andExpect(jsonPath("$.content[0].title", containsStringIgnoringCase(keyword)))
+				.andExpect(jsonPath("$.content[0].writer", equalTo("홍길동")))
 				.andExpect(jsonPath("$.content[0].type", equalTo(type)));
 		}
 		
@@ -200,7 +195,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
 		
 		// given
 		int bookId = 1;
-		BookInfoDto bookInfoDto = BookInfoDto.builder()
+		BookInfoReq bookInfoReq = BookInfoReq.builder()
 				.quantity(1)
 				.discount(10)
 				.supPrice(3000)
@@ -209,7 +204,7 @@ class BookInfoControllerTest extends ControllerTestCommon {
 		// when
 		ResultActions resultActions = mvc.perform(patch("/book/{bookId}", bookId)
 				.contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(bookInfoDto))
+                .content(objectMapper.writeValueAsString(bookInfoReq))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 		
@@ -217,9 +212,9 @@ class BookInfoControllerTest extends ControllerTestCommon {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(bookId)))
-                .andExpect(jsonPath("$.quantity", equalTo(bookInfoDto.getQuantity())))
-                .andExpect(jsonPath("$.discount", equalTo(bookInfoDto.getDiscount())))
-                .andExpect(jsonPath("$.supPrice", equalTo(bookInfoDto.getSupPrice())));
+                .andExpect(jsonPath("$.quantity", equalTo(bookInfoReq.getQuantity())))
+                .andExpect(jsonPath("$.discount", equalTo(bookInfoReq.getDiscount())))
+                .andExpect(jsonPath("$.supPrice", equalTo(bookInfoReq.getSupPrice())));
 	}
 	
 	@Test

@@ -1,16 +1,17 @@
-package com.lhj.bookstore.dto;
+package com.lhj.bookstore.dto.req;
 
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class BookInfoDto {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class BookInfoReq {
 	
 	private Long id; // 도서번호
 	
@@ -32,14 +33,14 @@ public class BookInfoDto {
 	private Integer discount; // 적용할인율
 	
 	@Builder
-	public BookInfoDto(String title
-						, String type 
-						, Integer quantity
-						, Integer supPrice 
-						, String writer
-						, Integer fixPrice
-						, Integer discount
-						, LocalDate createdAt) {
+	public BookInfoReq(String title
+			, String type 
+			, Integer quantity
+			, Integer supPrice 
+			, String writer
+			, Integer fixPrice
+			, Integer discount
+			, LocalDate createdAt) {
 		
 		this.title = title;
 		this.type = type;

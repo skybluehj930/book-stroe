@@ -1,26 +1,21 @@
-package com.lhj.bookstore.entity;
+package com.lhj.bookstore.dto.res;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AccessLevel;
+import com.lhj.bookstore.dto.req.BookInfoReq;
+import com.lhj.bookstore.entity.BookInfoEntity;
+import com.lhj.bookstore.mapper.BookInfoMapper;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "book_info")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookInfoEntity {
-
-	@Id // pk
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+@NoArgsConstructor
+public class BookInfoRes {
+	
 	private Long id; // 도서번호
 	
 	private String title; // 도서명
@@ -33,27 +28,16 @@ public class BookInfoEntity {
 	
 	private String writer; // 저자
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate createdAt; // 발행일자
 	
 	private Integer fixPrice; // 정가
 	
 	private Integer discount; // 적용할인율
-	
-	
-	public void changeSupPrice(Integer supPrice) {
-		this.supPrice = supPrice;
-	}
-	
-	public void changeQuantitye(Integer quantity) {
-		this.quantity = quantity;
-	}
-	
-	public void changeDiscount(Integer discount) {
-		this.discount = discount;
-	}
-	
+
 	@Builder
-	public BookInfoEntity(String title
+	public BookInfoRes(Long id
+			, String title
 			, String type 
 			, Integer quantity
 			, Integer supPrice 
@@ -62,6 +46,7 @@ public class BookInfoEntity {
 			, Integer discount
 			, LocalDate createdAt) {
 		
+		this.id = id;
 		this.title = title;
 		this.type = type;
 		this.quantity = quantity;
@@ -71,4 +56,4 @@ public class BookInfoEntity {
 		this.discount = discount;
 		this.createdAt = createdAt;
 	}
-}
+ }

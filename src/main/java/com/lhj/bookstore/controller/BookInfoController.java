@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhj.bookstore.dto.BookInfoDto;
-import com.lhj.bookstore.dto.SearchBookInfoDto;
+import com.lhj.bookstore.dto.req.BookInfoReq;
+import com.lhj.bookstore.dto.req.SearchBookInfoReq;
 import com.lhj.bookstore.service.BookInfoService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,22 +22,22 @@ public class BookInfoController {
 	private final BookInfoService bookInfoService;
 	
 	@PostMapping("/book")
-	public ResponseEntity<Object> registBookInfo(@RequestBody BookInfoDto bookInfoDto) {
-		return ResponseEntity.ok(bookInfoService.registBookInfo(bookInfoDto));
+	public ResponseEntity<Object> registBookInfo(@RequestBody BookInfoReq bookInfoReq) {
+		return ResponseEntity.ok(bookInfoService.registBookInfo(bookInfoReq));
 	}
 	
 	@GetMapping("/book")
-	public ResponseEntity<Object> searchBookInfo(@ModelAttribute SearchBookInfoDto searchBookInfoDto) {
-		return ResponseEntity.ok(bookInfoService.searchBookInfo(searchBookInfoDto));
+	public ResponseEntity<Object> searchBookInfo(@ModelAttribute SearchBookInfoReq searchBookInfoReq) {
+		return ResponseEntity.ok(bookInfoService.searchBookInfo(searchBookInfoReq));
 	}
 	
 	@PatchMapping("/book/{bookId}")
-	public ResponseEntity<Object> modifyBookInfo(@PathVariable long bookId, @RequestBody BookInfoDto bookInfoDto) {
-		return ResponseEntity.ok(bookInfoService.modifyBookInfo(bookId, bookInfoDto));
+	public ResponseEntity<Object> modifyBookInfo(@PathVariable Long bookId, @RequestBody BookInfoReq bookInfoReq) {
+		return ResponseEntity.ok(bookInfoService.modifyBookInfo(bookId, bookInfoReq));
 	}
 	
 	@GetMapping("/book/{bookId}")
-	public ResponseEntity<Object> getBookInfo(@PathVariable long bookId) {
+	public ResponseEntity<Object> getBookInfo(@PathVariable Long bookId) {
 		return ResponseEntity.ok(bookInfoService.getBookInfo(bookId));
 	}
 }

@@ -14,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
-import com.lhj.bookstore.dto.BookInfoDto;
-import com.lhj.bookstore.dto.SearchBookInfoDto;
+import com.lhj.bookstore.dto.req.BookInfoReq;
+import com.lhj.bookstore.dto.req.SearchBookInfoReq;
+import com.lhj.bookstore.dto.res.BookInfoRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 @DisplayName("도서 Service to Jpa 테스트")
@@ -43,7 +44,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 		String[] writerArr = {"홍길동", "이목룡", "임꺽정"};
 		
 		for (int i = 0; i < titleArr.length; i++) {
-			BookInfoDto bookInfoDto = BookInfoDto.builder()
+			BookInfoReq bookInfoReq = BookInfoReq.builder()
 					.title(titleArr[i])
 					.type("T00" + (i + 1))
 					.supPrice(1000)
@@ -54,7 +55,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 					.createdAt(LocalDate.parse("2023-01-10"))
 					.build();
 			
-			bookInfoService.registBookInfo(bookInfoDto);
+			bookInfoService.registBookInfo(bookInfoReq);
 		}
 	}
 	
@@ -63,7 +64,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 	public void registBookInfo() {
 		
 		// given
-		BookInfoDto bookInfoDto = BookInfoDto.builder()
+		BookInfoReq bookInfoReq = BookInfoReq.builder()
 				.title("Node.js")
 				.type("T002")
 				.supPrice(1000)
@@ -75,7 +76,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 				.build();
 		
 		// when
-		BookInfoEntity result = bookInfoService.registBookInfo(bookInfoDto);
+		BookInfoRes result = bookInfoService.registBookInfo(bookInfoReq);
 		
 		// then
 		assertThat(result).isNotNull();
@@ -92,7 +93,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 			// given
 			String keyword = "java"; 
 			String type = "T001"; 
-			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.keyword(keyword)
 					.type(type)
 					.offset(1)
@@ -100,7 +101,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 					.build();
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoService.searchBookInfo(searchBookInfoDto);
+			Page<BookInfoRes> reuslt = bookInfoService.searchBookInfo(searchBookInfoReq);
 			
 			// then
 			assertThat(reuslt.getContent()).isNotNull();
@@ -116,7 +117,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 			// given
 			String keyword = "길동"; 
 			String type = "T001"; 
-			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.keyword(keyword)
 					.type(type)
 					.offset(1)
@@ -124,7 +125,7 @@ class BookInfoServiceTest extends ServiceTestCommon {
 					.build();
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoService.searchBookInfo(searchBookInfoDto);
+			Page<BookInfoRes> reuslt = bookInfoService.searchBookInfo(searchBookInfoReq);
 			
 			// then
 			assertThat(reuslt.getContent()).isNotEmpty();
@@ -137,10 +138,10 @@ class BookInfoServiceTest extends ServiceTestCommon {
 		void searchBookInfo3() {
 			
 			// given
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto();
+			SearchBookInfoReq searchBookInfoReq = new SearchBookInfoReq();
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoService.searchBookInfo(searchBookInfoDto);
+			Page<BookInfoRes> reuslt = bookInfoService.searchBookInfo(searchBookInfoReq);
 			
 			// then
 			assertThat(reuslt.getContent()).isNotEmpty();
@@ -154,23 +155,23 @@ class BookInfoServiceTest extends ServiceTestCommon {
 		
 		// given
 		long bookId = 1L;
-		BookInfoDto bookInfoDto = BookInfoDto.builder()
+		BookInfoReq bookInfoReq = BookInfoReq.builder()
 				.quantity(1)
 				.discount(10)
 				.supPrice(3000)
 				.build();
 		
-		bookInfoService.modifyBookInfo(bookId, bookInfoDto);
+		bookInfoService.modifyBookInfo(bookId, bookInfoReq);
 		
 		// when
-		BookInfoEntity reuslt = bookInfoService.getBookInfo(bookId);
+		BookInfoRes reuslt = bookInfoService.getBookInfo(bookId);
 		
 		// then
 		assertThat(reuslt).isNotNull();
 		assertThat(reuslt.getId()).isEqualTo(bookId);
-		assertThat(reuslt.getQuantity()).isEqualTo(bookInfoDto.getQuantity());
-		assertThat(reuslt.getDiscount()).isEqualTo(bookInfoDto.getDiscount());
-		assertThat(reuslt.getSupPrice()).isEqualTo(bookInfoDto.getSupPrice());
+		assertThat(reuslt.getQuantity()).isEqualTo(bookInfoReq.getQuantity());
+		assertThat(reuslt.getDiscount()).isEqualTo(bookInfoReq.getDiscount());
+		assertThat(reuslt.getSupPrice()).isEqualTo(bookInfoReq.getSupPrice());
 	}
 	
 	@Test
@@ -178,12 +179,13 @@ class BookInfoServiceTest extends ServiceTestCommon {
 	void getBookInfo() {
 		
 		// given
-		long id = 1L;
+		long bookId = 1L;
 		
 		// when
-		BookInfoEntity reuslt = bookInfoService.getBookInfo(id);
+		BookInfoRes reuslt = bookInfoService.getBookInfo(bookId);
 		
 		// then
 		assertThat(reuslt).isNotNull();
+		assertThat(reuslt.getId()).isEqualTo(bookId);
 	}
 }

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StopWatch;
 
-import com.lhj.bookstore.dto.SearchBookInfoDto;
+import com.lhj.bookstore.dto.req.SearchBookInfoReq;
+import com.lhj.bookstore.dto.res.BookInfoRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
 
 @DisplayName("도서  Jpa 단위 테스트")
@@ -58,7 +59,6 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		}
 	}
 	
-	
 	@Test
 	@DisplayName("도서 등록")
 	void registBookInfo() {
@@ -93,17 +93,17 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 			// given
 			String keyword = "Mysql"; 
 			String type = "T003"; 
-			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.keyword(keyword)
 					.type(type)
 					.offset(1)
 					.limit(10)
 					.build();
-			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			
 			// when
 //			List<BookInfoEntity> reuslt = bookInfoRepository.findByTitleContaining(title);
-			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			Page<BookInfoRes> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
 			pagingLog(reuslt);
 			
 			// then
@@ -119,16 +119,16 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 			// given
 			String keyword = "길동"; 
 			String type = "T001"; 
-			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.keyword(keyword)
 					.type(type)
 					.offset(1)
 					.limit(10)
 					.build();
-			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			Page<BookInfoRes> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
 			pagingLog(reuslt);
 			
 			// then
@@ -142,11 +142,11 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		void searchBookInfo3() {
 			
 			// given
-			SearchBookInfoDto searchBookInfoDto = new SearchBookInfoDto();
-			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			SearchBookInfoReq searchBookInfoReq = new SearchBookInfoReq();
+			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			Page<BookInfoRes> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
 			pagingLog(reuslt);
 			
 			// then
@@ -159,14 +159,14 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		void searchBookInfo4() {
 			
 			// given
-			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.offset(1)
 					.limit(4)
 					.build();
-			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			Page<BookInfoRes> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
 			pagingLog(reuslt);
 			
 			// then
@@ -179,14 +179,14 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		void searchBookInfo5() {
 			
 			// given
-			SearchBookInfoDto searchBookInfoDto = SearchBookInfoDto.builder()
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.offset(1)
 					.limit(2)
 					.build();
-			Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
+			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			
 			// when
-			Page<BookInfoEntity> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+			Page<BookInfoRes> reuslt = bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
 			pagingLog(reuslt);
 			
 			// then
@@ -195,20 +195,21 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		}
 	}
 	
-	
 	@Test
 	@DisplayName("도서 수정")
 	void modifyBookInfo() {
 		
 		// given
+		long bookId = 2L;
 		int discount = 10;
-		BookInfoEntity bookInfoEntity = bookInfoRepository.findById(1L).orElse(null);
+		BookInfoEntity bookInfoEntity = bookInfoRepository.findById(bookId).orElse(null);
 		bookInfoEntity.changeDiscount(discount);
 		
 		// when
-		BookInfoEntity reuslt = bookInfoRepository.findById(1L).orElse(null);
+		BookInfoEntity reuslt = bookInfoRepository.findById(bookId).orElse(null);
 		
 		// then
+		assertThat(reuslt).isNotNull();
 		assertThat(reuslt.getDiscount()).isEqualTo(discount);
 	}
 	
@@ -217,20 +218,21 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 	void getBookInfo() {
 		
 		// given
-		long id = 1L;
+		long bookId = 1L;
 		
 		// when
-		BookInfoEntity reuslt = bookInfoRepository.findById(1L).orElse(null);
+		BookInfoRes reuslt = bookInfoRepository.getBookInfo(bookId);
 		
 		// then
 		assertThat(reuslt).isNotNull();
+		assertThat(reuslt.getId()).isEqualTo(bookId);
 	}
 	
 	/**
 	 * 페이징 정보 확인 메소드
 	 * @param reuslt
 	 */
-	void pagingLog(Page<BookInfoEntity> reuslt) {
+	void pagingLog(Page<BookInfoRes> reuslt) {
 		System.out.println("total : " + reuslt.getTotalElements());
 		System.out.println("pages : " + reuslt.getTotalPages());
 		System.out.println("num : " + reuslt.getNumber());

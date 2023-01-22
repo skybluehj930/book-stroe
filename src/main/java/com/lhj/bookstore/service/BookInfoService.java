@@ -1,8 +1,5 @@
 package com.lhj.bookstore.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -12,57 +9,45 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.lhj.bookstore.dto.BookInfoDto;
-import com.lhj.bookstore.dto.SearchBookInfoDto;
+import com.lhj.bookstore.dto.req.BookInfoReq;
+import com.lhj.bookstore.dto.req.SearchBookInfoReq;
+import com.lhj.bookstore.dto.res.BookInfoRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
+import com.lhj.bookstore.mapper.BookInfoMapper;
 import com.lhj.bookstore.repository.BookInfoRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BookInfoService {
+public class BookInfoService implements BookInfoMapper {
 	
 	private final BookInfoRepository bookInfoRepository;
 
 	@Transactional
-	public BookInfoEntity registBookInfo(BookInfoDto bookInfoDto) {
-		BookInfoEntity bookInfoEntity = BookInfoEntity.builder()
-				.title(bookInfoDto.getTitle())
-				.type(bookInfoDto.getType())
-				.supPrice(bookInfoDto.getSupPrice())
-				.fixPrice(bookInfoDto.getFixPrice())
-				.quantity(bookInfoDto.getQuantity())
-				.writer(bookInfoDto.getWriter())
-				.discount(bookInfoDto.getDiscount())
-				.createdAt(bookInfoDto.getCreatedAt())
-				.build();
-		
-		return bookInfoRepository.save(bookInfoEntity);
+	public BookInfoRes registBookInfo(BookInfoReq bookInfoReq) {
+		BookInfoEntity bookInfoEntity = dtoToEntity(bookInfoReq);
+		return entityToDto(bookInfoRepository.save(bookInfoEntity));
 	}
 
-	public List<BookInfoEntity> findByTitleContaining(String title) {
-		return bookInfoRepository.findByTitleContaining(title);
-	}
-
-	public Page<BookInfoEntity> searchBookInfo(SearchBookInfoDto searchBookInfoDto) {
-		Pageable pageable = PageRequest.of(searchBookInfoDto.getOffset() -1, searchBookInfoDto.getLimit());
-		return bookInfoRepository.searchBookInfo(searchBookInfoDto, pageable);
+	public Page<BookInfoRes> searchBookInfo(SearchBookInfoReq searchBookInfoReq) {
+		Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
+		return bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
 	}
 
 	@Transactional
-	public BookInfoEntity modifyBookInfo(long bookId, BookInfoDto bookInfoDto) {
+	public BookInfoRes modifyBookInfo(Long bookId, BookInfoReq bookInfoReq) {
 		Optional<BookInfoEntity> bookInfoEntity = bookInfoRepository.findById(bookId);
 		if(bookInfoEntity.isPresent()) {
-			bookInfoEntity.get().changeDiscount(bookInfoDto.getDiscount());
-			bookInfoEntity.get().changeQuantitye(bookInfoDto.getQuantity());
-			bookInfoEntity.get().changeSupPrice(bookInfoDto.getSupPrice());
+			bookInfoEntity.get().changeDiscount(bookInfoReq.getDiscount());
+			bookInfoEntity.get().changeQuantitye(bookInfoReq.getQuantity());
+			bookInfoEntity.get().changeSupPrice(bookInfoReq.getSupPrice());
 		}
-		return bookInfoEntity.get();
+		return entityToDto(bookInfoEntity.get());
 	}
 
-	public BookInfoEntity getBookInfo(long id) {
-		return bookInfoRepository.findById(id).orElse(null);
+	public BookInfoRes getBookInfo(Long bookId) {
+		return bookInfoRepository.getBookInfo(bookId);
 	}
 
 }
