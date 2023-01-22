@@ -14,8 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import com.lhj.bookstore.dto.BookInfoDto;
 import com.lhj.bookstore.dto.req.SearchContSupBookReq;
+import com.lhj.bookstore.dto.res.BookInfoRes;
 import com.lhj.bookstore.dto.res.ContSupBookRes;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -50,7 +50,8 @@ public class ContractorRepositoryCustomImpl implements ContractorRepositoryCusto
 					, contractorEntity.id.as("contId")
 					, contractorEntity.lowest
 					, contractorEntity.stateCd
-					, list(Projections.fields(BookInfoDto.class
+					, contractorEntity.contractAt
+					, list(Projections.fields(BookInfoRes.class
 							, bookInfoEntity.id
 							, bookInfoEntity.title
 							, bookInfoEntity.type
@@ -64,17 +65,17 @@ public class ContractorRepositoryCustomImpl implements ContractorRepositoryCusto
 			)));
 		
 		JPAQuery<Long> countQuery = queryFactory
-				.select(contractorEntity.count())
-				.from(contractorEntity)
-				.innerJoin(contractorEntity.supplyList, supplyEntity)
-				.innerJoin(supplyEntity.supplyBookList, supplyBookEntity)
-				.innerJoin(supplyBookEntity.bookInfo, bookInfoEntity)
-				.where(
-						containsTitle(searchContSupBookReq.getTitle())
-						, containsWriter(searchContSupBookReq.getWriter())
-						, eqType(searchContSupBookReq.getType())
-						, eqStateCd(searchContSupBookReq.getStateCd())
-				);
+			.select(contractorEntity.count())
+			.from(contractorEntity)
+			.innerJoin(contractorEntity.supplyList, supplyEntity)
+			.innerJoin(supplyEntity.supplyBookList, supplyBookEntity)
+			.innerJoin(supplyBookEntity.bookInfo, bookInfoEntity)
+			.where(
+					containsTitle(searchContSupBookReq.getTitle())
+					, containsWriter(searchContSupBookReq.getWriter())
+					, eqType(searchContSupBookReq.getType())
+					, eqStateCd(searchContSupBookReq.getStateCd())
+			);
 		
 		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchFirst);
 	}

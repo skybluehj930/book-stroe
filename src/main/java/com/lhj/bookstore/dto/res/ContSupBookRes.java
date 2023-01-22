@@ -1,15 +1,11 @@
 package com.lhj.bookstore.dto.res;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lhj.bookstore.dto.BookInfoDto;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
@@ -20,10 +16,7 @@ public class ContSupBookRes {
 	
 	private String stateCd; // 상태 코드
 	
-	List<BookInfoDto> bookInfo = new ArrayList<BookInfoDto>();
+	private LocalDate contractAt; // 계약일자
 	
-	private Integer offset = 1;
-	
-	private Integer limit = 10;
-	
+	List<BookInfoRes> bookInfo = new ArrayList<BookInfoRes>();
 }
