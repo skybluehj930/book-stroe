@@ -16,7 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.lhj.bookstore.dto.req.SearchContSupBookReq;
+import com.lhj.bookstore.dto.req.SearchContReq;
 import com.lhj.bookstore.dto.res.ContSupBookRes;
+import com.lhj.bookstore.dto.res.ContractorRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
 import com.lhj.bookstore.entity.ContractorEntity;
 import com.lhj.bookstore.entity.SupplyBookEntity;
@@ -74,18 +76,31 @@ public class ContractorRepositoryTest extends RepositoryTestCommon {
 	}
 	
 	@Test
-	@DisplayName("계약업체 조회")
-	void findContractor() {
+	@DisplayName("계약업체 검색")
+	void earchContractor() {
 		// given
-		int offset = 1;
-		int limit = 10;
-		Pageable pageable = PageRequest.of(offset -1, limit);
+		String stateCd = "A";
+		LocalDate startAt = LocalDate.parse("2023-01-22");
+		LocalDate endAt = LocalDate.parse("2023-01-22");
+		SearchContReq searchContReq = SearchContReq.builder()
+				.stateCd(stateCd)
+				.startAt(startAt)
+				.endAt(endAt)
+				.offset(1)
+				.limit(10)
+				.build();
+		Pageable pageable = PageRequest.of(searchContReq.getOffset() -1, searchContReq.getLimit());
 		
 		// when
-		Page<ContractorEntity> reuslt = contractorRepository.findAll(pageable);
+		Page<ContractorRes> reuslt = contractorRepository.searchContractor(searchContReq, pageable);
 		
 		// then
-		assertThat(reuslt.getTotalElements()).isEqualTo(3);
+		assertThat(reuslt).isNotEmpty();
+		assertThat(reuslt.getContent().get(0).getStateCd()).isEqualTo(stateCd);
+		assertThat(reuslt.getContent().get(0).getContractAt().isAfter(startAt) 
+					|| reuslt.getContent().get(0).getContractAt().isEqual(startAt));
+		assertThat(reuslt.getContent().get(0).getContractAt().isBefore(endAt) 
+					|| reuslt.getContent().get(0).getContractAt().isEqual(endAt));
 	}
 	
 	@Test
@@ -302,5 +317,31 @@ public class ContractorRepositoryTest extends RepositoryTestCommon {
 			assertThat(reuslt.getContent().get(0).getBookInfo()
 					.get(0).getTitle()).isEqualTo("JUnit test");
 		}
+		
+		@Test
+		@DisplayName("계약업체 공급된 도서와 상관 없이 단건 조회 - 도서가 있는 경우")
+		void getContSupBook() {
+			// given 
+			long contId = 4L;
+			
+			// when
+			ContSupBookRes result = contractorRepository.getContSupBook(contId);
+			
+			assertThat(result.getContId()).isEqualTo(contId);
+			assertThat(result.getBookInfo().get(0).getTitle()).isEqualTo("Hello Java");
+		}
+	}
+	
+	@Test
+	@DisplayName("계약업체 공급된 도서와 상관 없이 단건 조회 - 도서가 없는 경우")
+	void getContSupBook() {
+		// given 
+		long contId = 1L;
+		
+		// when
+		ContSupBookRes result = contractorRepository.getContSupBook(contId);
+		
+		assertThat(result.getContId()).isEqualTo(contId);
+		assertThat(result.getBookInfo().get(0).getId()).isNull();
 	}
 }
