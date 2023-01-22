@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lhj.bookstore.dto.ContractorDto;
+import com.lhj.bookstore.dto.req.ContractorReq;
 import com.lhj.bookstore.entity.ContractorEntity;
 import com.lhj.bookstore.repository.ContractorRepository;
 
@@ -70,8 +70,8 @@ class ContractorControllerTest extends ControllerTestCommon {
 	@DisplayName("계약업체 등록")
 	void registContractor() throws Exception {
 		// given
-		ContractorDto contractorDto = ContractorDto.builder()
-				.contractAt("2023-01-14")
+		ContractorReq contractorReq = ContractorReq.builder()
+				.contractAt(LocalDate.now())
 				.lowest(10)
 				.stateCd("A")
 				.build();
@@ -79,7 +79,7 @@ class ContractorControllerTest extends ControllerTestCommon {
 		// when
 		ResultActions resultActions = mvc.perform(post("/contractor")
 				.contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(contractorDto))
+                .content(objectMapper.writeValueAsString(contractorReq))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 		
@@ -87,7 +87,7 @@ class ContractorControllerTest extends ControllerTestCommon {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.stateCd").value(contractorDto.getStateCd()));
+                .andExpect(jsonPath("$.stateCd").value(contractorReq.getStateCd()));
 	}
 	
 	@Test
@@ -118,7 +118,7 @@ class ContractorControllerTest extends ControllerTestCommon {
 		int conId = 1;
 		int lowest = 20;
 		String stateCd = "B";
-		ContractorDto contractorDto = ContractorDto.builder()
+		ContractorReq contractorReq = ContractorReq.builder()
 				.lowest(lowest)
 				.stateCd(stateCd)
 				.build();
@@ -126,7 +126,7 @@ class ContractorControllerTest extends ControllerTestCommon {
 		// when
 		ResultActions resultActions = mvc.perform(patch("/contractor/{conId}", conId)
 				.contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(contractorDto))
+                .content(objectMapper.writeValueAsString(contractorReq))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 		
@@ -134,7 +134,7 @@ class ContractorControllerTest extends ControllerTestCommon {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(conId)))
-                .andExpect(jsonPath("$.lowest", equalTo(contractorDto.getLowest())))
-                .andExpect(jsonPath("$.stateCd", equalTo(contractorDto.getStateCd())));
+                .andExpect(jsonPath("$.lowest", equalTo(contractorReq.getLowest())))
+                .andExpect(jsonPath("$.stateCd", equalTo(contractorReq.getStateCd())));
 	}
 }

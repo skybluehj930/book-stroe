@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhj.bookstore.dto.ContractorDto;
+import com.lhj.bookstore.dto.req.ContractorReq;
 import com.lhj.bookstore.service.ContractorService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class ContractorController {
 	private final ContractorService contractorService;
 	
 	@PostMapping("/contractor")
-	public ResponseEntity<Object> registContractor(@RequestBody ContractorDto contractorDto) {
-		return ResponseEntity.ok(contractorService.registContractor(contractorDto));
+	public ResponseEntity<Object> registContractor(@RequestBody ContractorReq contractorReq) {
+		return ResponseEntity.ok(contractorService.registContractor(contractorReq));
 	}
 	
 	@GetMapping("/contractor")
@@ -31,7 +31,7 @@ public class ContractorController {
 	}
 	
 	@PatchMapping("/contractor/{conId}")
-	public ResponseEntity<Object> changeContractor(@PathVariable Long conId, @RequestBody ContractorDto contractorDto) {
-		return ResponseEntity.ok(contractorService.modifyContractor(conId, contractorDto));
+	public ResponseEntity<Object> changeContractor(@PathVariable Long conId, @RequestBody ContractorReq contractorReq) {
+		return ResponseEntity.ok(contractorService.modifyContractor(conId, contractorReq));
 	}
 }

@@ -2,6 +2,8 @@ package com.lhj.bookstore.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
-import com.lhj.bookstore.dto.ContractorDto;
+import com.lhj.bookstore.dto.req.ContractorReq;
+import com.lhj.bookstore.dto.res.ContractorRes;
 import com.lhj.bookstore.entity.ContractorEntity;
 
 @DisplayName("계약업체 Service to Jpa 테스트")
@@ -39,13 +42,13 @@ class ContractorServiceTest extends ServiceTestCommon {
 		String[] stateCdArr = {"A", "B", "C"};
 		
 		for (int i = 0; i < stateCdArr.length; i++) {
-			ContractorDto contractorDto = ContractorDto.builder()
-					.contractAt("2023-01-14")
+			ContractorReq contractorReq = ContractorReq.builder()
+					.contractAt(LocalDate.now())
 					.lowest(lowestArr[i])
 					.stateCd(stateCdArr[i])
 					.build();
 			
-			contractorService.registContractor(contractorDto);
+			contractorService.registContractor(contractorReq);
 		}
 	}
 	
@@ -53,14 +56,14 @@ class ContractorServiceTest extends ServiceTestCommon {
 	@DisplayName("계약업체 등록")
 	void registContractor() {
 		// given
-		ContractorDto contractorDto = ContractorDto.builder()
-				.contractAt("2023-01-14")
+		ContractorReq contractorReq = ContractorReq.builder()
+				.contractAt(LocalDate.now())
 				.lowest(10)
 				.stateCd("A")
 				.build();
 		
 		// when
-		ContractorEntity reuslt = contractorService.registContractor(contractorDto);
+		ContractorRes reuslt = contractorService.registContractor(contractorReq);
 		
 		// then
 		assertThat(reuslt).isNotNull();
@@ -87,13 +90,13 @@ class ContractorServiceTest extends ServiceTestCommon {
 		long conId = 1L;
 		int lowest = 20;
 		String stateCd = "B";
-		ContractorDto contractorDto = ContractorDto.builder()
+		ContractorReq contractorReq = ContractorReq.builder()
 				.lowest(lowest)
 				.stateCd(stateCd)
 				.build();
 		
 		// when
-		ContractorEntity reuslt = contractorService.modifyContractor(conId, contractorDto);
+		ContractorRes reuslt = contractorService.modifyContractor(conId, contractorReq);
 		
 		// then
 		assertThat(reuslt.getId()).isEqualTo(conId);

@@ -28,7 +28,6 @@ public class BookInfoRes {
 	
 	private String writer; // 저자
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate createdAt; // 발행일자
 	
 	private Integer fixPrice; // 정가
