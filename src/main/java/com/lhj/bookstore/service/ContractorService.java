@@ -38,8 +38,8 @@ public class ContractorService implements ContractorMapper {
 	}
 
 	@Transactional
-	public ContractorRes modifyContractor(Long conId, ContractorReq contractorReq) {
-		Optional<ContractorEntity> contractorEntity = contractorRepository.findById(conId);
+	public ContractorRes changeContractor(Long contId, ContractorReq contractorReq) {
+		Optional<ContractorEntity> contractorEntity = contractorRepository.findById(contId);
 		if(contractorEntity.isPresent()) {
 			contractorEntity.get().changeLowest(contractorReq.getLowest());
 			contractorEntity.get().changeStateCd(contractorReq.getStateCd());

@@ -108,22 +108,22 @@ public class ContractorRepositoryTest extends RepositoryTestCommon {
 	}
 	
 	@Test
-	@DisplayName("계약업체 수정")
-	void modifyContractor() {
+	@DisplayName("계약업체 정보 변경")
+	void changeContractor() {
 		// given
-		long conId = 1L;
+		long contId = 1L;
 		int lowest = 20;
 		String stateCd = "B";
 		
-		ContractorEntity contractorEntity = contractorRepository.findById(conId).orElse(null);
+		ContractorEntity contractorEntity = contractorRepository.findById(contId).orElse(null);
 		contractorEntity.changeLowest(lowest);
 		contractorEntity.changeStateCd(stateCd);
 		
 		// when
-		ContractorEntity reuslt = contractorRepository.findById(conId).orElse(null);
+		ContractorEntity reuslt = contractorRepository.findById(contId).orElse(null);
 		
 		// then
-		assertThat(reuslt.getId()).isEqualTo(conId);
+		assertThat(reuslt.getId()).isEqualTo(contId);
 		assertThat(reuslt.getLowest()).isEqualTo(lowest);
 		assertThat(reuslt.getStateCd()).isEqualTo(stateCd);
 	}

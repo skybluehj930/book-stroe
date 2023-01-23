@@ -5,8 +5,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -136,10 +136,10 @@ class ContractorControllerTest extends ControllerTestCommon {
 	}
 	
 	@Test
-	@DisplayName("계약업체 수정")
-	void modifyContractor() throws JsonProcessingException, Exception {
+	@DisplayName("계약업체 정보 변경")
+	void changeContractor() throws JsonProcessingException, Exception {
 		// given
-		int conId = 1;
+		int contId = 1;
 		int lowest = 20;
 		String stateCd = "B";
 		ContractorReq contractorReq = ContractorReq.builder()
@@ -148,7 +148,7 @@ class ContractorControllerTest extends ControllerTestCommon {
 				.build();
 		
 		// when
-		ResultActions resultActions = mvc.perform(patch("/contractor/{conId}", conId)
+		ResultActions resultActions = mvc.perform(put("/contractor/"+ contId)
 				.contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(contractorReq))
                 .accept(MediaType.APPLICATION_JSON))
@@ -157,7 +157,7 @@ class ContractorControllerTest extends ControllerTestCommon {
 		// then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(conId)))
+                .andExpect(jsonPath("$.id", equalTo(contId)))
                 .andExpect(jsonPath("$.lowest", equalTo(contractorReq.getLowest())))
                 .andExpect(jsonPath("$.stateCd", equalTo(contractorReq.getStateCd())));
 	}

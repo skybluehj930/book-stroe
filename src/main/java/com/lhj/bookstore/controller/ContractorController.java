@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,9 +33,9 @@ public class ContractorController {
 		return ResponseEntity.ok(contractorService.searchContractor(searchContReq));
 	}
 	
-	@PatchMapping("/contractor/{conId}")
-	public ResponseEntity<Object> changeContractor(@PathVariable Long conId, @RequestBody ContractorReq contractorReq) {
-		return ResponseEntity.ok(contractorService.modifyContractor(conId, contractorReq));
+	@PutMapping("/contractor/{contId}")
+	public ResponseEntity<Object> changeContractor(@PathVariable Long contId, @RequestBody ContractorReq contractorReq) {
+		return ResponseEntity.ok(contractorService.changeContractor(contId, contractorReq));
 	}
 	
 	@GetMapping("/contractor/supply-book")

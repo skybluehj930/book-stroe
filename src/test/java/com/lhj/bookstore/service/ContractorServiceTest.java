@@ -112,10 +112,10 @@ class ContractorServiceTest extends ServiceTestCommon {
 	}
 	
 	@Test
-	@DisplayName("계약업체 수정")
-	void modifyContractor() {
+	@DisplayName("계약업체 정보 변경")
+	void changeContractor() {
 		// given
-		long conId = 1L;
+		long contId = 1L;
 		int lowest = 20;
 		String stateCd = "B";
 		ContractorReq contractorReq = ContractorReq.builder()
@@ -124,10 +124,10 @@ class ContractorServiceTest extends ServiceTestCommon {
 				.build();
 		
 		// when
-		ContractorRes result = contractorService.modifyContractor(conId, contractorReq);
+		ContractorRes result = contractorService.changeContractor(contId, contractorReq);
 		
 		// then
-		assertThat(result.getId()).isEqualTo(conId);
+		assertThat(result.getId()).isEqualTo(contId);
 		assertThat(result.getLowest()).isEqualTo(lowest);
 		assertThat(result.getStateCd()).isEqualTo(stateCd);
 	}
