@@ -97,7 +97,7 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 	@DisplayName("공급 등록")
 	void registSupply() {
 		// given
-		ContractorEntity contractor = contractorRepository.getById(1L);
+		ContractorEntity contractor = contractorRepository.findById(1L).orElse(null);
 		
 		SupplyEntity supply = supplyRepository.save(SupplyEntity.builder()
 				.contractor(contractor)
@@ -106,7 +106,7 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 		
 		List<Long> bookIds = Arrays.asList(1L, 2L, 3L);
 		for (Long bookId :  bookIds) {
-			BookInfoEntity bookInfo = bookInfoRepository.getById(bookId);
+			BookInfoEntity bookInfo = bookInfoRepository.findById(bookId).orElse(null);
 			
 			supplyBookRepository.save(SupplyBookEntity.builder()
 					.supply(supply)
@@ -115,7 +115,7 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 		}
 		
 		// when
-		SupplyEntity result = supplyRepository.getById(supply.getId());
+		SupplyEntity result = supplyRepository.findById(supply.getId()).orElse(null);
 		
 		// then
 		assertThat(result).isNotNull();
