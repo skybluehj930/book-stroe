@@ -1,15 +1,12 @@
 package com.lhj.bookstore.repository.custom;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.lhj.bookstore.dto.SearchSupplyBookDto;
-import com.lhj.bookstore.dto.SupplyBookDto;
+import com.lhj.bookstore.dto.req.SearchSupBookReq;
+import com.lhj.bookstore.dto.res.SupBookRes;
 
 public interface SupplyRepositoryCustom {
-	List<SupplyBookDto> getSupplyBooks(Long supId);
 	
-	Page<SearchSupplyBookDto> searchSupplyBook(SearchSupplyBookDto searchSupplyBookDto, Pageable pageable);
+	Page<SupBookRes> searchSupplyBook(SearchSupBookReq searchSupBookReq, Pageable pageable);
 }

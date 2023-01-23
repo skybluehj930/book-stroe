@@ -3,9 +3,9 @@ package com.lhj.bookstore.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,8 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.lhj.bookstore.dto.SearchSupplyBookDto;
-import com.lhj.bookstore.dto.SupplyBookDto;
+import com.lhj.bookstore.dto.req.SearchSupBookReq;
+import com.lhj.bookstore.dto.res.SupBookRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
 import com.lhj.bookstore.entity.ContractorEntity;
 import com.lhj.bookstore.entity.SupplyBookEntity;
@@ -97,53 +97,30 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 	@DisplayName("공급 등록")
 	void registSupply() {
 		// given
-		BookInfoEntity bookInfo = bookInfoRepository.save(BookInfoEntity.builder()
-				.title("Node.js")
-				.type("T002")
-				.supPrice(1000)
-				.fixPrice(2000)
-				.quantity(100)
-				.writer("이목룡")
-				.discount(5)
-				.createdAt(LocalDate.now())
-				.build());
+		ContractorEntity contractor = contractorRepository.getById(1L);
 		
-		ContractorEntity contractor = contractorRepository.save(ContractorEntity.builder()
-				.contractAt(LocalDate.now())
-				.lowest(10)
-				.stateCd("A")
-				.build());
-		
-		// when
 		SupplyEntity supply = supplyRepository.save(SupplyEntity.builder()
 				.contractor(contractor)
 				.supplyAt(LocalDate.now())
 				.build());
 		
-		SupplyBookEntity result = supplyBookRepository.save(SupplyBookEntity.builder()
-				.supply(supply)
-				.bookInfo(bookInfo)
-				.build());
+		List<Long> bookIds = Arrays.asList(1L, 2L, 3L);
+		for (Long bookId :  bookIds) {
+			BookInfoEntity bookInfo = bookInfoRepository.getById(bookId);
+			
+			supplyBookRepository.save(SupplyBookEntity.builder()
+					.supply(supply)
+					.bookInfo(bookInfo)
+					.build());
+		}
+		
+		// when
+		SupplyEntity result = supplyRepository.getById(supply.getId());
 		
 		// then
 		assertThat(result).isNotNull();
-		assertThat(result.getSupply().getId()).isEqualTo(supply.getId());
-		assertThat(result.getBookInfo().getId()).isEqualTo(bookInfo.getId());
-	}
-	
-	@Test
-	@DisplayName("공급 도서 상세 조회")
-	void getSupply() {
-		// given
-		long supId = 1L;
-		
-		// when
-		List<SupplyBookDto> result = supplyRepository.getSupplyBooks(supId);
-		
-		// then
-		assertThat(result).isNotEmpty();
-		assertThat(result.get(0).getTitle()).isEqualTo("Hello Java");
-		assertThat(result.get(0).getWriter()).isEqualTo("홍길동");
+		assertThat(result.getSupplyBookList().size()).isEqualTo(bookIds.size());
+		assertThat(result.getContractor().getId()).isEqualTo(contractor.getId());
 	}
 	
 	@Nested
@@ -154,38 +131,38 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 		@DisplayName("입력한 저자 이름을 포함")
 		void searchSupplyBook() {
 			// given
-			SearchSupplyBookDto searchSupplyBookDto = SearchSupplyBookDto.builder()
+			SearchSupBookReq searchSupBookReq = SearchSupBookReq.builder()
 					.writer("길동")
 					.offset(1)
 					.limit(10)
 					.build();
-			Pageable pageable = PageRequest.of(searchSupplyBookDto.getOffset() -1, searchSupplyBookDto.getLimit());
+			Pageable pageable = PageRequest.of(searchSupBookReq.getOffset() -1, searchSupBookReq.getLimit());
 			
 			// when
-			Page<SearchSupplyBookDto> result = supplyRepository.searchSupplyBook(searchSupplyBookDto, pageable);
+			Page<SupBookRes> result = supplyRepository.searchSupplyBook(searchSupBookReq, pageable);
 			
 			// then
 			assertThat(result).isNotEmpty();
-			assertThat(result.getContent().get(0).getWriter()).isEqualTo("홍길동");
+			assertThat(result.getContent().get(0).getBookInfo().get(0).getWriter()).isEqualTo("홍길동");
 		}
 		
 		@Test
 		@DisplayName("입력한 도서 제목을 포함")
 		void searchSupplyBook2() {
 			// given
-			SearchSupplyBookDto searchSupplyBookDto = SearchSupplyBookDto.builder()
+			SearchSupBookReq searchSupBookReq = SearchSupBookReq.builder()
 					.title("java")
 					.offset(1)
 					.limit(10)
 					.build();
-			Pageable pageable = PageRequest.of(searchSupplyBookDto.getOffset() -1, searchSupplyBookDto.getLimit());
+			Pageable pageable = PageRequest.of(searchSupBookReq.getOffset() -1, searchSupBookReq.getLimit());
 			
 			// when
-			Page<SearchSupplyBookDto> result = supplyRepository.searchSupplyBook(searchSupplyBookDto, pageable);
+			Page<SupBookRes> result = supplyRepository.searchSupplyBook(searchSupBookReq, pageable);
 			
 			// then
 			assertThat(result).isNotEmpty();
-			assertThat(result.getContent().get(0).getTitle()).isEqualTo("Hello Java");
+			assertThat(result.getContent().get(0).getBookInfo().get(0).getTitle()).isEqualTo("Hello Java");
 		}
 		
 		@Test
@@ -193,19 +170,19 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 		void searchSupplyBook3() {
 			// given
 			String type = "T001";
-			SearchSupplyBookDto searchSupplyBookDto = SearchSupplyBookDto.builder()
+			SearchSupBookReq searchSupBookReq = SearchSupBookReq.builder()
 					.type(type)
 					.offset(1)
 					.limit(10)
 					.build();
-			Pageable pageable = PageRequest.of(searchSupplyBookDto.getOffset() -1, searchSupplyBookDto.getLimit());
+			Pageable pageable = PageRequest.of(searchSupBookReq.getOffset() -1, searchSupBookReq.getLimit());
 			
 			// when
-			Page<SearchSupplyBookDto> result = supplyRepository.searchSupplyBook(searchSupplyBookDto, pageable);
+			Page<SupBookRes> result = supplyRepository.searchSupplyBook(searchSupBookReq, pageable);
 			
 			// then
 			assertThat(result).isNotEmpty();
-			assertThat(result.getContent().get(0).getType()).isEqualTo(type);
+			assertThat(result.getContent().get(0).getBookInfo().get(0).getType()).isEqualTo(type);
 		}
 		
 		@Test
@@ -213,23 +190,49 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 		void searchSupplyBook4() {
 			// given
 			String type = "T001";
-			SearchSupplyBookDto searchSupplyBookDto = SearchSupplyBookDto.builder()
+			SearchSupBookReq searchSupBookReq = SearchSupBookReq.builder()
 					.title("java")
 					.writer("길동")
 					.type(type)
 					.offset(1)
 					.limit(10)
 					.build();
-			Pageable pageable = PageRequest.of(searchSupplyBookDto.getOffset() -1, searchSupplyBookDto.getLimit());
+			Pageable pageable = PageRequest.of(searchSupBookReq.getOffset() -1, searchSupBookReq.getLimit());
 			
 			// when
-			Page<SearchSupplyBookDto> result = supplyRepository.searchSupplyBook(searchSupplyBookDto, pageable);
+			Page<SupBookRes> result = supplyRepository.searchSupplyBook(searchSupBookReq, pageable);
 			
 			// then
 			assertThat(result).isNotEmpty();
-			assertThat(result.getContent().get(0).getWriter()).isEqualTo("홍길동");
-			assertThat(result.getContent().get(0).getTitle()).isEqualTo("Hello Java");
-			assertThat(result.getContent().get(0).getType()).isEqualTo(type);
+			assertThat(result.getContent().get(0).getBookInfo().get(0).getWriter()).isEqualTo("홍길동");
+			assertThat(result.getContent().get(0).getBookInfo().get(0).getTitle()).isEqualTo("Hello Java");
+			assertThat(result.getContent().get(0).getBookInfo().get(0).getType()).isEqualTo(type);
 		}
+	}
+	
+	@Test
+	@DisplayName("공급 내역 삭제")
+	void removeSupply() {
+		// given
+		Optional<SupplyEntity> supply = supplyRepository.findById(1L);
+		long contId = 0L;
+		long supBookId = 0L;
+		if (supply.isPresent()) {
+			contId = supply.get().getContractor().getId();
+			supBookId = supply.get().getSupplyBookList().get(0).getId();
+			supply.get().getSupplyBookList().forEach(supplyBookRepository::delete);
+			supply.get().deleteSupCont();
+			supplyRepository.delete(supply.get());
+		}
+		
+		// when
+		ContractorEntity contractor = contractorRepository.findById(contId).orElse(null);
+		SupplyBookEntity supplyBook = supplyBookRepository.findById(supBookId).orElse(null);
+		SupplyEntity result = supplyRepository.findById(1L).orElse(null);
+		
+		// then
+		assertThat(contractor.getSupplyList()).isEmpty();
+		assertThat(supplyBook).isNull();
+		assertThat(result).isNull();
 	}
 }

@@ -2,17 +2,13 @@ package com.lhj.bookstore.entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,6 +36,13 @@ public class SupplyEntity {
 	private List<SupplyBookEntity> supplyBookList = new ArrayList<>();
 	
 	private LocalDate supplyAt; // 공급일자
+	
+	public void deleteSupCont() {
+		if(this.contractor != null) {
+			contractor.getSupplyList().remove(this);
+			this.contractor = null;
+		}
+	}
 	
 	@Builder
 	public SupplyEntity(ContractorEntity contractor, LocalDate supplyAt) {
