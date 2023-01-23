@@ -77,11 +77,15 @@ public class ContractorRepositoryTest extends RepositoryTestCommon {
 	
 	@Test
 	@DisplayName("계약업체 검색")
-	void earchContractor() {
+	void searchContractor() {
 		// given
 		String stateCd = "A";
-		LocalDate startAt = LocalDate.parse("2023-01-22");
-		LocalDate endAt = LocalDate.parse("2023-01-22");
+		// 특정 날짜 지장
+//		LocalDate startAt = LocalDate.parse("2023-01-22");
+//		LocalDate endAt = LocalDate.parse("2023-01-22");
+		// 현재 날짜
+		LocalDate startAt = LocalDate.now();
+		LocalDate endAt = LocalDate.now();
 		SearchContReq searchContReq = SearchContReq.builder()
 				.stateCd(stateCd)
 				.startAt(startAt)
@@ -341,7 +345,8 @@ public class ContractorRepositoryTest extends RepositoryTestCommon {
 		// when
 		ContSupBookRes result = contractorRepository.getContSupBook(contId);
 		
+		// then
 		assertThat(result.getContId()).isEqualTo(contId);
-		assertThat(result.getBookInfo().get(0).getId()).isNull();
+		assertThat(result.getBookInfo().get(0).getTitle()).isNull();
 	}
 }

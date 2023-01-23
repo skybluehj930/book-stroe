@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lhj.bookstore.dto.req.ContractorReq;
+import com.lhj.bookstore.dto.req.SearchContReq;
+import com.lhj.bookstore.dto.req.SearchContSupBookReq;
+import com.lhj.bookstore.dto.res.ContSupBookRes;
 import com.lhj.bookstore.dto.res.ContractorRes;
 import com.lhj.bookstore.entity.ContractorEntity;
 import com.lhj.bookstore.mapper.ContractorMapper;
@@ -29,9 +32,9 @@ public class ContractorService implements ContractorMapper {
 		return entityToDto(contractorRepository.save(contractorEntity));
 	}
 
-	public Page<ContractorEntity> findContractor(int offset, int limit) {
-		Pageable pageable = PageRequest.of(offset -1, limit);
-		return contractorRepository.findAll(pageable);
+	public Page<ContractorRes> searchContractor(SearchContReq searchContReq) {
+		Pageable pageable = PageRequest.of(searchContReq.getOffset() -1, searchContReq.getLimit());
+		return contractorRepository.searchContractor(searchContReq, pageable);
 	}
 
 	@Transactional
@@ -44,4 +47,12 @@ public class ContractorService implements ContractorMapper {
 		return entityToDto(contractorEntity.get());
 	}
 
+	public Page<ContSupBookRes> searchContSupBook(SearchContSupBookReq searchContSupBookReq) {
+		Pageable pageable = PageRequest.of(searchContSupBookReq.getOffset() -1, searchContSupBookReq.getLimit());
+		return contractorRepository.searchContSupBook(searchContSupBookReq, pageable);
+	}
+
+	public ContSupBookRes getContSupBook(Long contId) {
+		return contractorRepository.getContSupBook(contId);
+	}
 }
