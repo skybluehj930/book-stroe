@@ -71,13 +71,16 @@ public class SupplyService {
 		return supplyRepository.searchSupplyBook(searchSupBookReq, pageable);
 	}
 
-	public Long removeSupply(Long supId) {
+	public SupplyRes removeSupply(Long supId) {
 		Optional<SupplyEntity> supply = supplyRepository.findById(supId);
 		if (supply.isPresent()) {
 			supply.get().getSupplyBookList().forEach(supplyBookRepository::delete);
 			supply.get().deleteSupCont();
 			supplyRepository.delete(supply.get());
-			return supId;
+			return SupplyRes.builder()
+					.supId(supply.get().getId())
+					.supplyAt(supply.get().getSupplyAt())
+					.build();
 		}
 		throw new NullPointerException("not found supply");
 	}
