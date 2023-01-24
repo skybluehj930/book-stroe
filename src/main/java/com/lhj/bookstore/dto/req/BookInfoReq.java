@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookInfoReq {
 	
-	private Long id; // 도서번호
-	
 	private String title; // 도서명
 	
 	private String type; // 도서구분
