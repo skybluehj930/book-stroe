@@ -41,6 +41,11 @@ dependencies {
     
     // commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    
+    // springfox-swagger-ui
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    
 }
 
 test {
