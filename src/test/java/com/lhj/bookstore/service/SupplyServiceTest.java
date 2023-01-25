@@ -23,6 +23,7 @@ import com.lhj.bookstore.dto.res.SupplyRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
 import com.lhj.bookstore.entity.ContractorEntity;
 import com.lhj.bookstore.entity.SupplyBookEntity;
+import com.lhj.bookstore.entity.SupplyBookId;
 import com.lhj.bookstore.entity.SupplyEntity;
 import com.lhj.bookstore.repository.BookInfoRepository;
 import com.lhj.bookstore.repository.ContractorRepository;
@@ -206,10 +207,14 @@ class SupplyServiceTest extends ServiceTestCommon {
 		long supId = 1L;
 		Optional<SupplyEntity> supply = supplyRepository.findById(supId);
 		long contId = 0L;
-		long supBookId = 0L;
+		SupplyBookId supBookId = null;
 		if (supply.isPresent()) {
 			contId = supply.get().getContractor().getId();
-			supBookId = supply.get().getSupplyBookList().get(0).getId();
+			long bookId = supply.get().getSupplyBookList().get(0).getBookInfo().getId();
+			supBookId = SupplyBookId.builder()
+					.supply(supId)
+					.bookInfo(bookId)
+					.build();
 		}
 		
 		// when 

@@ -23,6 +23,7 @@ import com.lhj.bookstore.dto.res.SupBookRes;
 import com.lhj.bookstore.entity.BookInfoEntity;
 import com.lhj.bookstore.entity.ContractorEntity;
 import com.lhj.bookstore.entity.SupplyBookEntity;
+import com.lhj.bookstore.entity.SupplyBookId;
 import com.lhj.bookstore.entity.SupplyEntity;
 
 @DisplayName("공급 jpa 단위 테스트")
@@ -214,12 +215,18 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 	@DisplayName("공급 내역 삭제")
 	void removeSupply() {
 		// given
-		Optional<SupplyEntity> supply = supplyRepository.findById(1L);
+		long supId = 1L;
+		Optional<SupplyEntity> supply = supplyRepository.findById(supId);
 		long contId = 0L;
-		long supBookId = 0L;
+		SupplyBookId supBookId = null;
 		if (supply.isPresent()) {
 			contId = supply.get().getContractor().getId();
-			supBookId = supply.get().getSupplyBookList().get(0).getId();
+			long bookId = supply.get().getSupplyBookList().get(0).getBookInfo().getId();
+			supBookId = SupplyBookId.builder()
+					.supply(supId)
+					.bookInfo(bookId)
+					.build();
+			
 			supply.get().getSupplyBookList().forEach(supplyBookRepository::delete);
 			supply.get().deleteSupCont();
 			supplyRepository.delete(supply.get());
@@ -234,5 +241,50 @@ public class SupplyRepositoryTest extends RepositoryTestCommon {
 		assertThat(contractor.getSupplyList()).isEmpty();
 		assertThat(supplyBook).isNull();
 		assertThat(result).isNull();
+	}
+	
+	@Test
+	@DisplayName("공급도서 조회")
+	void getSupBook() {
+		// given
+		long supId = 1L;
+		long bookId = 1L;
+		SupplyBookId supBookId = SupplyBookId.builder()
+					.supply(supId)
+					.bookInfo(bookId)
+					.build();
+		
+		// when
+		SupplyBookEntity result = supplyBookRepository.findById(supBookId).orElse(null);
+		
+		// then
+		assertThat(result).isNotNull();
+		assertThat(result.getSupply().getId()).isEqualTo(supId);
+		assertThat(result.getBookInfo().getId()).isEqualTo(bookId);
+	}
+	
+	@Test
+	@DisplayName("공급도서 복합키 동등성 테스트")
+	void SupplyBookId() {
+		// given
+		long supId = 1L;
+		long bookId = 1L;
+		
+		// when
+		SupplyBookId supBookId1 = SupplyBookId.builder()
+				.supply(supId)
+				.bookInfo(bookId)
+				.build();
+	
+		SupplyBookId supBookId2 = SupplyBookId.builder()
+				.supply(supId)
+				.bookInfo(bookId)
+				.build();
+		
+		// then
+		assertThat(supBookId1.equals(supBookId2));
+		assertThat(supBookId1.hashCode()).isEqualTo(supBookId2.hashCode());
+		System.out.println("supBookId1: " + supBookId1.hashCode());
+		System.out.println("supBookId2: " + supBookId2.hashCode());
 	}
 }
