@@ -1,5 +1,6 @@
 package com.lhj.bookstore.dto.req;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,16 +12,22 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchContSupBookReq {
 	
-	private String stateCd; // 상태 코드
+	@ApiModelProperty(value = "상태코드", required = false, allowableValues = "A, B, C")
+	private String stateCd;
 	
-	private String title; // 도서명
+	@ApiModelProperty(value = "도서명: Hellow Java", required = false)
+	private String title;
 	
-	private String type; // 도서구분
+	@ApiModelProperty(value = "도서구분", required = false, allowableValues = "T001, T002, T003")
+	private String type;
 	
-	private String writer; // 저자
+	@ApiModelProperty(value = "저자: 홍길동", required = false)
+	private String writer;
 	
+	@ApiModelProperty(value = "페이지 번호: 1", required = true)
 	private Integer offset;
 	
+	@ApiModelProperty(value = "페이지 사이즈: 10", required = true)
 	private Integer limit;
 	
 	@Builder

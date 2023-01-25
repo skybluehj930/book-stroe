@@ -2,6 +2,7 @@ package com.lhj.bookstore.dto.res;
 
 import java.time.LocalDate;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ContractorRes {
 
-	private Long id; // 계약번호
+	@Schema(description = "계약번호", required = true, example = "1")
+	private Long id;
 	
-	private LocalDate contractAt; // 계약일자
+	@Schema(description = "계약일자", required = true, example = "2023-01-25")
+	private LocalDate contractAt;
 	
-	private Integer lowest; // 최저가 비율
+	@Schema(description = "최저가 비율", required = true, example = "10")
+	private Integer lowest;
 	
-	private String stateCd; // 상태 코드
+	@Schema(description = "상태 코드", required = true, example = "A", allowableValues = {"A", "B", "C"})
+	private String stateCd;
 	
 	@Builder
 	public ContractorRes(Long id, LocalDate contractAt, Integer lowest, String stateCd) {
