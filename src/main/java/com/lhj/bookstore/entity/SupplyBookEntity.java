@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,16 +18,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "supply_book")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@IdClass(SupplyBookId.class)
 public class SupplyBookEntity {
-	
-	@Id // pk
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 공급도서번호
 
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "sup_id")
 	private SupplyEntity supply; // 공급번호
 	
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "book_id")
 	private BookInfoEntity bookInfo; // 도서번호
