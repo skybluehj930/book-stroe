@@ -1,6 +1,7 @@
 package com.lhj.bookstore.dto.req;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,16 +13,16 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchBookInfoReq {
 	
-	@ApiModelProperty(required = false, value = "도서명 or 저자명에 포함 되는 키워드", example = "d")
+	@ApiModelProperty(value = "검색 키워드(도서명 or 저자명에 포함 되는 키워드)", required = false)
 	private String keyword;
 	
-	@ApiModelProperty(required = false, value = "T001", allowableValues = "T001, T002, T003")
+	@ApiModelProperty(value = "도서구분", required = false, allowableValues = "T001, T002, T003")
 	private String type;
 	
-	@ApiModelProperty(required = true, value = "1")
+	@ApiModelProperty(value = "페이지 번호: 1", required = true)
 	private Integer offset = 1;
 	
-	@ApiModelProperty(required = true, value = "10")
+	@ApiModelProperty(value = "페이지 사이즈: 10", required = true)
 	private Integer limit = 10;
 	
 	@Builder
