@@ -172,12 +172,14 @@ class BookInfoControllerTest extends ControllerTestCommon {
 		void searchBookInfo3() throws Exception {
 			
 			// given
-			MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+			String offset = "1";
+			String limit = "10";
 			
 			// when
 			ResultActions resultActions = mvc.perform(get("/book")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-					.params(params)
+					.param("offset", offset)
+					.param("limit", limit)
 					.accept(MediaType.APPLICATION_JSON))
 					.andDo(print());
 			

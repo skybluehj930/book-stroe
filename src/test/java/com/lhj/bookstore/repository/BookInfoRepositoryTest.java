@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -142,7 +141,10 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 		void searchBookInfo3() {
 			
 			// given
-			SearchBookInfoReq searchBookInfoReq = new SearchBookInfoReq();
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
+					.offset(1)
+					.limit(10)
+					.build();
 			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			
 			// when
@@ -181,7 +183,7 @@ class BookInfoRepositoryTest extends RepositoryTestCommon {
 			// given
 			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
 					.offset(1)
-					.limit(2)
+					.limit(10)
 					.build();
 			Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 			

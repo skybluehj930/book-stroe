@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import com.lhj.bookstore.dto.req.BookInfoReq;
 import com.lhj.bookstore.dto.req.SearchBookInfoReq;
 import com.lhj.bookstore.dto.res.BookInfoRes;
-import com.lhj.bookstore.entity.BookInfoEntity;
 
 @DisplayName("도서 Service to Jpa 테스트")
 @Import(BookInfoService.class)
@@ -138,7 +137,10 @@ class BookInfoServiceTest extends ServiceTestCommon {
 		void searchBookInfo3() {
 			
 			// given
-			SearchBookInfoReq searchBookInfoReq = new SearchBookInfoReq();
+			SearchBookInfoReq searchBookInfoReq = SearchBookInfoReq.builder()
+					.offset(1)
+					.limit(10)
+					.build();
 			
 			// when
 			Page<BookInfoRes> reuslt = bookInfoService.searchBookInfo(searchBookInfoReq);
