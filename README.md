@@ -1,4 +1,4 @@
-# Jpa Querydsl과 H2db를 활용한 Spring REST Api JUnit5 Test
+# Querydsl과 H2db를 활용한 Spring REST Api JUnit5 Test
 <br/>
 
 ## ERD
