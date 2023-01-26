@@ -29,7 +29,7 @@ public class SupplyEntity {
     private Long id; // 공급번호
 	
 	@ManyToOne
-	@JoinColumn(name = "cont_id")
+	@JoinColumn(name = "cont_id", nullable = false)
 	private ContractorEntity contractor; // 계약번호
 	
 	@OneToMany(mappedBy = "supply")

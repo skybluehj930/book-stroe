@@ -23,12 +23,12 @@ public class SupplyBookEntity {
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "sup_id")
+	@JoinColumn(name = "sup_id", nullable = false)
 	private SupplyEntity supply; // 공급번호
 	
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "book_id")
+	@JoinColumn(name = "book_id", nullable = false)
 	private BookInfoEntity bookInfo; // 도서번호
 	
 	@Builder
