@@ -66,11 +66,13 @@ public class SupplyService {
 		throw new NullPointerException("not found contractor");
 	}
 
+	@Transactional(readOnly = true)
 	public Page<SupBookRes> searchSupplyBook(SearchSupBookReq searchSupBookReq) {
 		Pageable pageable = PageRequest.of(searchSupBookReq.getOffset() -1, searchSupBookReq.getLimit());
 		return supplyRepository.searchSupplyBook(searchSupBookReq, pageable);
 	}
 
+	@Transactional
 	public SupplyRes removeSupply(Long supId) {
 		Optional<SupplyEntity> supply = supplyRepository.findById(supId);
 		if (supply.isPresent()) {

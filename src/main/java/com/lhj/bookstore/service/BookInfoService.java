@@ -2,12 +2,11 @@ package com.lhj.bookstore.service;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lhj.bookstore.dto.req.BookInfoReq;
 import com.lhj.bookstore.dto.req.SearchBookInfoReq;
@@ -30,6 +29,7 @@ public class BookInfoService implements BookInfoMapper {
 		return entityToDto(bookInfoRepository.save(bookInfoEntity));
 	}
 
+	@Transactional(readOnly = true)
 	public Page<BookInfoRes> searchBookInfo(SearchBookInfoReq searchBookInfoReq) {
 		Pageable pageable = PageRequest.of(searchBookInfoReq.getOffset() -1, searchBookInfoReq.getLimit());
 		return bookInfoRepository.searchBookInfo(searchBookInfoReq, pageable);
@@ -46,6 +46,7 @@ public class BookInfoService implements BookInfoMapper {
 		return entityToDto(bookInfoEntity.get());
 	}
 
+	@Transactional(readOnly = true)
 	public BookInfoRes getBookInfo(Long bookId) {
 		return bookInfoRepository.getBookInfo(bookId);
 	}

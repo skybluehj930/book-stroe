@@ -2,12 +2,11 @@ package com.lhj.bookstore.service;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lhj.bookstore.dto.req.ContractorReq;
 import com.lhj.bookstore.dto.req.SearchContReq;
@@ -32,6 +31,7 @@ public class ContractorService implements ContractorMapper {
 		return entityToDto(contractorRepository.save(contractorEntity));
 	}
 
+	@Transactional(readOnly = true)
 	public Page<ContractorRes> searchContractor(SearchContReq searchContReq) {
 		Pageable pageable = PageRequest.of(searchContReq.getOffset() -1, searchContReq.getLimit());
 		return contractorRepository.searchContractor(searchContReq, pageable);
@@ -46,12 +46,14 @@ public class ContractorService implements ContractorMapper {
 		}
 		return entityToDto(contractorEntity.get());
 	}
-
+	
+	@Transactional(readOnly = true)
 	public Page<ContSupBookRes> searchContSupBook(SearchContSupBookReq searchContSupBookReq) {
 		Pageable pageable = PageRequest.of(searchContSupBookReq.getOffset() -1, searchContSupBookReq.getLimit());
 		return contractorRepository.searchContSupBook(searchContSupBookReq, pageable);
 	}
 
+	@Transactional(readOnly = true)
 	public ContSupBookRes getContSupBook(Long contId) {
 		return contractorRepository.getContSupBook(contId);
 	}
