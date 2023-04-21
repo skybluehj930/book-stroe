@@ -2,12 +2,6 @@ package com.lhj.bookstore.dto.res;
 
 import java.time.LocalDate;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.lhj.bookstore.dto.req.BookInfoReq;
-import com.lhj.bookstore.entity.BookInfoEntity;
-import com.lhj.bookstore.mapper.BookInfoMapper;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

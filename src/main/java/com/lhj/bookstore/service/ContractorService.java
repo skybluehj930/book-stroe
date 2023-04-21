@@ -14,14 +14,13 @@ import com.lhj.bookstore.dto.req.SearchContSupBookReq;
 import com.lhj.bookstore.dto.res.ContSupBookRes;
 import com.lhj.bookstore.dto.res.ContractorRes;
 import com.lhj.bookstore.entity.ContractorEntity;
-import com.lhj.bookstore.mapper.ContractorMapper;
 import com.lhj.bookstore.repository.ContractorRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ContractorService implements ContractorMapper {
+public class ContractorService {
 	
 	private final ContractorRepository contractorRepository;
 
@@ -56,5 +55,22 @@ public class ContractorService implements ContractorMapper {
 	@Transactional(readOnly = true)
 	public ContSupBookRes getContSupBook(Long contId) {
 		return contractorRepository.getContSupBook(contId);
+	}
+	
+	private ContractorRes entityToDto(ContractorEntity contractorEntity) {
+		return ContractorRes.builder()
+				.id(contractorEntity.getId())
+				.contractAt(contractorEntity.getContractAt())
+				.lowest(contractorEntity.getLowest())
+				.stateCd(contractorEntity.getStateCd())
+				.build();
+	}
+	
+	private ContractorEntity dtoToEntity(ContractorReq contractorReq) {
+		return ContractorEntity.builder()
+				.contractAt(contractorReq.getContractAt())
+				.lowest(contractorReq.getLowest())
+				.stateCd(contractorReq.getStateCd())
+				.build();
 	}
 }
