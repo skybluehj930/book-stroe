@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class ContractorEntity {
 	
 	private String stateCd; // 상태 코드
 	
-	@OneToMany(mappedBy = "contractor")
+	@OneToMany(mappedBy = "contractor", fetch = FetchType.LAZY)
 	private List<SupplyEntity> supplyList = new ArrayList<>();
 	
 	public void changeLowest(Integer lowest) {

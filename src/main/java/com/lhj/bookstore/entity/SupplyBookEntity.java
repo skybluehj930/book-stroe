@@ -1,6 +1,7 @@
 package com.lhj.bookstore.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,12 +23,12 @@ import lombok.NoArgsConstructor;
 public class SupplyBookEntity {
 
 	@Id
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sup_id", nullable = false)
 	private SupplyEntity supply; // 공급번호
 	
 	@Id
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id", nullable = false)
 	private BookInfoEntity bookInfo; // 도서번호
 	

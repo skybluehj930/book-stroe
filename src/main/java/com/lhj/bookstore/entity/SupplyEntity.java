@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,11 +29,11 @@ public class SupplyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 공급번호
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cont_id", nullable = false)
 	private ContractorEntity contractor; // 계약번호
 	
-	@OneToMany(mappedBy = "supply")
+	@OneToMany(mappedBy = "supply", fetch = FetchType.LAZY)
 	private List<SupplyBookEntity> supplyBookList = new ArrayList<>();
 	
 	private LocalDate supplyAt; // 공급일자
